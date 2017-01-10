@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="moment.js"></script>
+</head>
+<body>
+    
+<form>
+Fecha de entrada: <input type="date" id="start"/>
+Fecha de salida: <input type="date" id="end"/>
+Tipo de habitación: <select id="list">
+    <option value= 1>Simple</option>
+    <option value= 2>Doble</option>
+    <option value= 3 selected>-</option>
+</select><br /><br />
+<input type="button" value="Calcular" onclick="calcular()"/><br /><br />
+Coste de estancia: <input type="text" id="respuesta" size="20" name="respuesta"/> <br /><br />
+<input type="reset" name="B2" value="Reset" />
+  </form>
+  
+<script>
+    function calcular()
+    {
+        var total = 0;
+        var daily = 0;
+        var base = 0;
+        var month = 0;
+        var date = document.getElementById("start").value;
+        var type = document.getElementById("list").value;
+        var day =  moment(document.getElementById("start").value).format('L');
+        var weekday = moment(day).format('dddd');
+        var duration = getEventTime();
+        var index = duration;
+        var n = 1;        
+        
+        if (type == 1)
+        {
+            base = 30;
+        }
+        else if (type == 2)
+        {
+            base = 50;
+        }
+        
+        while (index != 0)
+        {
+            daily = 0;
+            daily = costedia(base, month, weekday, duration);
+            total = total + daily;
+            moment(date).add(n, 'days').calendar()
+            day = moment(date).format('L');
+            weekday = moment(day).format('dddd');
+            index = index - 1;
+            n = n + 1;
+        }
+        document.getElementById("respuesta").value = total;
+    }
+    function costedia(base, month, weekday, duration)
+    {
+        month = 0;
+        var result = base;
+        if (duration = 1)
+        {
+            result = result * 1.20;
+        }
+        
+        if (weekday == "Saturday" || weekday == "Sunday")
+        {
+            result = result * 1.15;
+        }
+        if (duration > 7)
+        {
+            result = result * 0.90;
+        }
+        if (month == 6 || month == 7 || month == 8 || month == 9)
+        {
+            result = result * 1.40;
+        }
+        return result;
+    }
+    function getEventTime ()
+    {
+        var start = moment(document.getElementById("start").value); var end = moment(document.getElementById("end").value); return (moment.duration(end.diff(start)).asDays());
+    } 
+  
+
+</script>
+</body>
+</html>
