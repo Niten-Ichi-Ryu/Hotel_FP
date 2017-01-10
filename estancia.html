@@ -10,32 +10,32 @@
 <form>
 Fecha de entrada: <input type="date" id="start"/>
 Fecha de salida: <input type="date" id="end"/>
-Tipo de habitación: <select id="list">
+Tipo de habitación: <select id="list"> 
     <option value= 1>Simple</option>
     <option value= 2>Doble</option>
     <option value= 3 selected>-</option>
 </select><br /><br />
-<input type="button" value="Calcular" onclick="calcular()"/><br /><br />
+<input type="button" value="Calcular" onclick="PriceCalculator()" /><br /><br />
 Coste de estancia: <input type="text" id="respuesta" size="20" name="respuesta"/> <br /><br />
 <input type="reset" name="B2" value="Reset" />
   </form>
   
 <script>
-    function calcular()
+    function PriceCalculator() //Programa para calcular el coste de la reserva.
     {
-        var total = 0;
-        var daily = 0;
-        var base = 0;
-        var month = 0;
-        var date = document.getElementById("start").value;
-        var type = document.getElementById("list").value;
-        var day =  moment(document.getElementById("start").value).format('L');
-        var weekday = moment(day).format('dddd');
-        var duration = getEventTime();
-        var index = duration;
-        var n = 1;        
+        //Variables.
+        var total = 0; //Coste total de la reserva.
+        var daily = 0; //Coste reserva por dia (puede variar de un dia a otro).
+        var base = 0; //Coste de la habitación base.
+        var type = document.getElementById("list").value; //Tipo de habitación.
+        var day =  moment(document.getElementById("start").value).format('L'); //Dia comienzo de la reserva (se modifica).
+        var weekday = moment(day).format('dddd'); //Dia de la semana (se modifica).
+        var month = (month = moment(day).month()) + 1; //Mes de la reserva (se modifica).
+        var duration = getEventTime(); //Duración de la reserva.
+        var index = duration; //Numero de repeticiones del bucle.
         
-        if (type == 1)
+        
+        if (type == 1) //Se indica el precio base de la habitación segun la variable type.
         {
             base = 30;
         }
@@ -44,48 +44,49 @@ Coste de estancia: <input type="text" id="respuesta" size="20" name="respuesta"/
             base = 50;
         }
         
-        while (index != 0)
+        while (index > 0 ) //Inicio bucle para calcular el precio final de la habitacion durante toda la reserva.
         {
-            daily = 0;
-            daily = costedia(base, month, weekday, duration);
+            daily = 0; //Se resetea el coste de la habitacion diariamente.
+            daily = costday(base, month, weekday, duration); //inicio subprograma.
             total = total + daily;
-            moment(date).add(n, 'days').calendar()
-            day = moment(date).format('L');
-            weekday = moment(day).format('dddd');
+            day = moment(day).add(1, 'days').format("L"); //Avanzamos un dia la variable day.
+            weekday = moment(day).format('dddd'); //Se actualiza, segun la variable day, el dia de la semana.
+            month = (moment(day).month()) + 1; //Se acutaliza, segun la variable day, el mes.
             index = index - 1;
-            n = n + 1;
         }
-        document.getElementById("respuesta").value = total;
+        
+        document.getElementById("respuesta").value = total; //Devuelve el coste por el form.
     }
-    function costedia(base, month, weekday, duration)
+    
+    function costday(base, month, weekday, duration) //Subprograma para el calculo del coste final por dia.
     {
-        month = 0;
-        var result = base;
-        if (duration = 1)
+        var result = base; //Se iguala el result al precio base.
+        if (duration = 1) //Si la reserva dura 1 dia, se le añade al precio base un 20%.
         {
             result = result * 1.20;
         }
-        
-        if (weekday == "Saturday" || weekday == "Sunday")
+        if (weekday == "Saturday" || weekday == "Sunday") //Si el dia de la semana es Sabado o Domingo, se le añade al precio un 15%.
         {
             result = result * 1.15;
         }
-        if (duration > 7)
+        if (duration > 7) //Si la reserva dura mas de 7 dias, se le descuenta al precio un 10%.
         {
             result = result * 0.90;
         }
-        if (month == 6 || month == 7 || month == 8 || month == 9)
+        if (month == 6 || month == 7 || month == 8 || month == 9) //Si el dia esta en los meses de Junio, Julio, Agosto o Septiembre se le añade un 40%.
         {
             result = result * 1.40;
         }
-        return result;
+        return result; //Devuelve el coste de la habitación por el dia indicado.
     }
-    function getEventTime ()
+    
+    function getEventTime () //Subprograma para obtener la duración de la estancia.
     {
-        var start = moment(document.getElementById("start").value); var end = moment(document.getElementById("end").value); return (moment.duration(end.diff(start)).asDays());
+        var start = moment(document.getElementById("start").value); 
+        var end = moment(document.getElementById("end").value); 
+        return (moment.duration(end.diff(start)).asDays());
     } 
   
-
 </script>
 </body>
 </html>
