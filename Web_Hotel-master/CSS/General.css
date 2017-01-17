@@ -1,0 +1,33 @@
+/* Remueve los navbar por defecto el margin-bottom y el rounded borders */ 
+#background {  /*fondo*/
+    height: 100%;
+    width: 100%;
+    background-color: #f2f2f2;
+}
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+}
+#map {
+    height: 430px;
+    width: 50%;
+    margin: auto; 
+}
+    
+/* Añade un gris de fondo y un padding en el footer */
+footer {
+    background-color: black;
+    padding: 25px;
+}
+    
+.carousel-inner img {
+    width: 100%; /* conjunto del width a 100% */
+    margin: auto;
+    min-height:200px;
+}
+
+/* Ocultar el texto del carrusel cuando la pantalla tiene menos de 600 píxeles de ancho */
+@media (max-width: 600px) {
+.carousel-caption {
+    display: none; 
+}
